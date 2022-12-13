@@ -30,7 +30,6 @@ class Bonificada (Conta):
     
     def deposite(self, valor):
         self.bonus += valor*0.0001
-        print(self.bonus)
         super().deposite(valor)
 
     def renderBonus(self):
