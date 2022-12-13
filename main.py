@@ -1,51 +1,4 @@
-import random
-
-
-class Conta():
-    def __init__(self, numConta):
-        self.numero = numConta
-        self.saldo = 0
-
-    def deposite(self, valor):
-        self.saldo = self.saldo + valor
-
-    def saque(self, valor):
-        if self.saldo - valor >= 0:
-            self.saldo -= valor
-            print("saque efetuado com sucesso!")
-        else:
-            print("Você não possui saldo suficiente")
-
-class Banco():
-    def __init__(self, nome):
-        self.nome = nome
-        self.contas = []
-
-    def getNome(self):
-        return self.nome
-
-    def criarConta(self):
-        num = random.randint(0, 1000)
-        c = Conta(num)
-        self.contas.append(c)
-        return num
-
-    def consultaSaldo(self, numConta):
-        for conta in self.contas:
-            if conta.numero == numConta:
-                return conta.saldo
-        return -1
-
-    def depositar(self, numConta, valor):
-        for conta in self.contas:
-            if conta.numero == numConta:
-                conta.deposite(valor)
-    
-    def sacar(self, numConta, valorSaque):
-        for conta in self.contas:
-            if conta.numero == numConta:
-                conta.saque(valorSaque)
-
+from bancoLib import Banco
 
 print("Bem-vindo")
 bancoUfrpe = Banco("UABJ")
@@ -54,13 +7,20 @@ print("0 - Sair")
 print("1 - Criar uma Nova Conta")
 print("2 - Consultar Saldo Conta")
 print("3 - Depositar na Conta")
-print("4 - Sacar")
+print("4 - Sacar na Conta")
+print("5 - Render Poupanca")
 escolha = int(input("digite a opção desejada:"))
 while escolha > 0:
     if escolha == 1:
         # criar uma conta
         print("Criando Conta...")
-        numConta = bancoUfrpe.criarConta()
+        print("1 - Conta Corrente")
+        print("2 - Conta Poupanca")
+        opcao = int(input("digite o tipo da conta:"))
+        if opcao == 1:
+            numConta = bancoUfrpe.criarConta()
+        else:
+            numConta = bancoUfrpe.criarPoupanca()
         print("Conta criada:", numConta)
     elif escolha == 2:
         print("Consultando Saldo...")
@@ -74,9 +34,20 @@ while escolha > 0:
         bancoUfrpe.depositar(numConta, valor)
         print("Valor Depositado")
     elif escolha == 4:
-        print("Sacando Conta...")
+        print("Sacando da Conta...")
         numConta = int(input("digite o numero da conta:"))
-        valorSaque = int(input("digite o valor que deseja sacar:"))
-        bancoUfrpe.sacar(numConta, valorSaque)
-
+        valor = int(input("digite o valor que deseja sacar:"))
+        resp = bancoUfrpe.sacar(numConta, valor)
+        if resp:  # significa resp == True
+            print("Valor Sacado")
+        else:
+            print("Saldo Insuficiente")
+    elif escolha == 5:
+        print("Rendendo Poupanca...")
+        numConta = int(input("digite o numero da conta poupanca:"))
+        resp = bancoUfrpe.renderPoupanca(numConta)
+        if resp:
+            print("Poupanca com novo saldo")
+        else:
+            print("A conta não é poupanca ou não existe")
     escolha = int(input("digite a opção desejada:"))
